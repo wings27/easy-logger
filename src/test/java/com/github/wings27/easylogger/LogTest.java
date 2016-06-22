@@ -10,9 +10,31 @@ public class LogTest {
 
     @Test
     public void testLog() {
-        Log.debug("debug with args : {}, {}", "arg0", "arg1");
-        Log.info("info with args : {}, {}", "arg0", "arg1");
-        Log.warn("warn with args : {}, {}", "arg0", "arg1");
-        Log.error("error with args : {}, {}", "arg0", "arg1");
+        Person alice = new Person("alice", 18);
+        Person bob = new Person("bob", 19);
+
+        Log.debug("debug with args : {}, {}", alice, bob);
+        Log.info("info with args : {}, {}", alice, bob);
+        Log.warn("warn with args : {}, {}", alice, bob);
+        Log.error("error with args : {}, {}", alice, bob);
     }
+
+    private static class Person {
+        private String name;
+        private Integer age;
+
+        public Person(String name, Integer age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Integer getAge() {
+            return age;
+        }
+    }
+
 }

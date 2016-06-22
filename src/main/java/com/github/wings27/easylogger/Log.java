@@ -1,5 +1,6 @@
 package com.github.wings27.easylogger;
 
+import com.github.wings27.easylogger.utils.JsonUtil;
 import org.slf4j.Logger;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,38 +20,6 @@ public final class Log {
     private static final ConcurrentMap<String, Logger> loggerCache = new ConcurrentHashMap<String, Logger>();
 
     /**
-     * Log a message object at level TRACE.
-     *
-     * @param message - the message object to be logged
-     */
-    public static void trace(String message) {
-        loadLogger().trace(message);
-    }
-
-    /**
-     * Log a message at level TRACE according to the specified format and argument.
-     * This form avoids superfluous object creation when the logger is disabled for level TRACE.
-     *
-     * @param format the format string
-     * @param arg    the argument
-     */
-    public static void trace(String format, Object arg) {
-        loadLogger().trace(format, arg);
-    }
-
-    /**
-     * Log a message at level TRACE according to the specified format and arguments.
-     * This form avoids superfluous object creation when the logger is disabled for the TRACE level.
-     *
-     * @param format the format string
-     * @param arg1   the first argument
-     * @param arg2   the second argument
-     */
-    public static void trace(String format, Object arg1, Object arg2) {
-        loadLogger().trace(format, arg1, arg2);
-    }
-
-    /**
      * Log a message at level TRACE according to the specified format and arguments.
      * This form avoids superfluous object creation when the logger is disabled for the TRACE level.
      *
@@ -58,7 +27,10 @@ public final class Log {
      * @param arguments an array of arguments
      */
     public static void trace(String format, Object... arguments) {
-        loadLogger().trace(format, arguments);
+        Logger logger = loadLogger();
+        if (logger.isTraceEnabled()) {
+            logger.trace(format, objects2JsonStrings(arguments));
+        }
     }
 
     /**
@@ -72,38 +44,6 @@ public final class Log {
     }
 
     /**
-     * Log a message object at level DEBUG.
-     *
-     * @param message - the message object to be logged
-     */
-    public static void debug(String message) {
-        loadLogger().debug(message);
-    }
-
-    /**
-     * Log a message at level DEBUG according to the specified format and argument.
-     * This form avoids superfluous object creation when the logger is disabled for level DEBUG.
-     *
-     * @param format the format string
-     * @param arg    the argument
-     */
-    public static void debug(String format, Object arg) {
-        loadLogger().debug(format, arg);
-    }
-
-    /**
-     * Log a message at level DEBUG according to the specified format and arguments.
-     * This form avoids superfluous object creation when the logger is disabled for the DEBUG level.
-     *
-     * @param format the format string
-     * @param arg1   the first argument
-     * @param arg2   the second argument
-     */
-    public static void debug(String format, Object arg1, Object arg2) {
-        loadLogger().debug(format, arg1, arg2);
-    }
-
-    /**
      * Log a message at level DEBUG according to the specified format and arguments.
      * This form avoids superfluous object creation when the logger is disabled for the DEBUG level.
      *
@@ -111,7 +51,10 @@ public final class Log {
      * @param arguments an array of arguments
      */
     public static void debug(String format, Object... arguments) {
-        loadLogger().debug(format, arguments);
+        Logger logger = loadLogger();
+        if (logger.isDebugEnabled()) {
+            logger.debug(format, objects2JsonStrings(arguments));
+        }
     }
 
     /**
@@ -125,46 +68,17 @@ public final class Log {
     }
 
     /**
-     * Log a message object at the INFO level.
-     *
-     * @param message - the message object to be logged
-     */
-    public static void info(String message) {
-        loadLogger().info(message);
-    }
-
-    /**
-     * Log a message at level INFO according to the specified format and argument.
-     * This form avoids superfluous object creation when the logger is disabled for the INFO level.
-     *
-     * @param format the format string
-     * @param arg    the argument
-     */
-    public static void info(String format, Object arg) {
-        loadLogger().info(format, arg);
-    }
-
-    /**
-     * Log a message at the INFO level according to the specified format and arguments.
-     * This form avoids superfluous object creation when the logger is disabled for the INFO level.
-     *
-     * @param format the format string
-     * @param arg1   the first argument
-     * @param arg2   the second argument
-     */
-    public static void info(String format, Object arg1, Object arg2) {
-        loadLogger().info(format, arg1, arg2);
-    }
-
-    /**
      * Log a message at level INFO according to the specified format and arguments.
      * This form avoids superfluous object creation when the logger is disabled for the INFO level.
      *
      * @param format   the format string
-     * @param argArray an array of arguments
+     * @param arguments an array of arguments
      */
-    public static void info(String format, Object... argArray) {
-        loadLogger().info(format, argArray);
+    public static void info(String format, Object... arguments) {
+        Logger logger = loadLogger();
+        if (logger.isInfoEnabled()) {
+            logger.info(format, objects2JsonStrings(arguments));
+        }
     }
 
     /**
@@ -178,38 +92,6 @@ public final class Log {
     }
 
     /**
-     * Log a message object at the WARN level.
-     *
-     * @param message - the message object to be logged
-     */
-    public static void warn(String message) {
-        loadLogger().warn(message);
-    }
-
-    /**
-     * Log a message at the WARN level according to the specified format and argument.
-     * This form avoids superfluous object creation when the logger is disabled for the WARN level.
-     *
-     * @param format the format string
-     * @param arg    the argument
-     */
-    public static void warn(String format, Object arg) {
-        loadLogger().warn(format, arg);
-    }
-
-    /**
-     * Log a message at the WARN level according to the specified format and arguments.
-     * This form avoids superfluous object creation when the logger is disabled for the WARN level.
-     *
-     * @param format the format string
-     * @param arg1   the first argument
-     * @param arg2   the second argument
-     */
-    public static void warn(String format, Object arg1, Object arg2) {
-        loadLogger().warn(format, arg1, arg2);
-    }
-
-    /**
      * Log a message at level WARN according to the specified format and arguments.
      * This form avoids superfluous object creation when the logger is disabled for the WARN level.
      *
@@ -217,7 +99,10 @@ public final class Log {
      * @param argArray an array of arguments
      */
     public static void warn(String format, Object... argArray) {
-        loadLogger().warn(format, argArray);
+        Logger logger = loadLogger();
+        if (logger.isWarnEnabled()) {
+            logger.warn(format, objects2JsonStrings(argArray));
+        }
     }
 
     /**
@@ -231,38 +116,6 @@ public final class Log {
     }
 
     /**
-     * Log a message object at the ERROR level.
-     *
-     * @param message - the message object to be logged
-     */
-    public static void error(String message) {
-        loadLogger().error(message);
-    }
-
-    /**
-     * Log a message at the ERROR level according to the specified format and argument.
-     * This form avoids superfluous object creation when the logger is disabled for the ERROR level.
-     *
-     * @param format the format string
-     * @param arg    the argument
-     */
-    public static void error(String format, Object arg) {
-        loadLogger().error(format, arg);
-    }
-
-    /**
-     * Log a message at the ERROR level according to the specified format and arguments.
-     * This form avoids superfluous object creation when the logger is disabled for the ERROR level.
-     *
-     * @param format the format string
-     * @param arg1   the first argument
-     * @param arg2   the second argument
-     */
-    public static void error(String format, Object arg1, Object arg2) {
-        loadLogger().error(format, arg1, arg2);
-    }
-
-    /**
      * Log a message at level ERROR according to the specified format and arguments.
      * This form avoids superfluous object creation when the logger is disabled for the ERROR level.
      *
@@ -270,7 +123,10 @@ public final class Log {
      * @param argArray an array of arguments
      */
     public static void error(String format, Object... argArray) {
-        loadLogger().error(format, argArray);
+        Logger logger = loadLogger();
+        if (logger.isErrorEnabled()) {
+            logger.error(format, objects2JsonStrings(argArray));
+        }
     }
 
     /**
@@ -281,51 +137,6 @@ public final class Log {
      */
     public static void error(String msg, Throwable t) {
         loadLogger().error(msg, t);
-    }
-
-    /**
-     * Is the logger instance enabled for the TRACE level?
-     *
-     * @return True if this Logger is enabled for the TRACE level, false otherwise.
-     */
-    public static boolean isTraceEnabled() {
-        return loadLogger().isTraceEnabled();
-    }
-
-    /**
-     * Is this logger instance enabled for the DEBUG level?
-     *
-     * @return True if this Logger is enabled for level DEBUG, false otherwise.
-     */
-    public static boolean isDebugEnabled() {
-        return loadLogger().isDebugEnabled();
-    }
-
-    /**
-     * Is this logger instance enabled for the INFO level?
-     *
-     * @return True if this Logger is enabled for the INFO level, false otherwise.
-     */
-    public static boolean isInfoEnabled() {
-        return loadLogger().isInfoEnabled();
-    }
-
-    /**
-     * Is this logger instance enabled for the WARN level?
-     *
-     * @return True if this Logger is enabled for the WARN level, false otherwise.
-     */
-    public static boolean isWarnEnabled() {
-        return loadLogger().isWarnEnabled();
-    }
-
-    /**
-     * Is this logger instance enabled for level ERROR?
-     *
-     * @return True if this Logger is enabled for level ERROR, false otherwise.
-     */
-    public static boolean isErrorEnabled() {
-        return loadLogger().isErrorEnabled();
     }
 
     private static String getInvokerClassName() {
@@ -360,4 +171,13 @@ public final class Log {
 
         return oldLogger == null ? logger : oldLogger;
     }
+
+    private static String[] objects2JsonStrings(Object... objects) {
+        String[] strings = new String[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            strings[i] = JsonUtil.serialize(objects[i]);
+        }
+        return strings;
+    }
+
 }
