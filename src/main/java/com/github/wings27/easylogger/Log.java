@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Supplier;
 
 /**
  * Project easy-logger Created by wenqiushi at 2014/08/26 15:44.
@@ -17,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public final class Log {
 
-    private static final ConcurrentMap<String, Logger> loggerCache = new ConcurrentHashMap<String, Logger>();
+    private static final ConcurrentMap<String, Logger> loggerCache = new ConcurrentHashMap<>();
 
     /**
      * Log a message at level TRACE according to the specified format and arguments.
@@ -139,18 +140,104 @@ public final class Log {
         loadLogger().error(msg, t);
     }
 
+    /**
+     * Log a message at level TRACE according to the specified format and arguments.
+     * This form avoids superfluous object creation when the logger is disabled for the TRACE level.
+     *
+     * @param format   the format string
+     * @param suppliers an array of suppliers
+     */
+    public static void trace(String format, Supplier<?>... suppliers) {
+        Logger logger = loadLogger();
+        if (logger.isTraceEnabled()) {
+            Object[] arguments = new Object[suppliers.length];
+            for (int i = 0; i < suppliers.length; i++) {
+                arguments[i] = suppliers[i].get();
+            }
+            logger.trace(format, objects2JsonStrings(arguments));
+        }
+    }
+
+    /**
+     * Log a message at level DEBUG according to the specified format and arguments.
+     * This form avoids superfluous object creation when the logger is disabled for the DEBUG level.
+     *
+     * @param format   the format string
+     * @param suppliers an array of suppliers
+     */
+    public static void debug(String format, Supplier<?>... suppliers) {
+        Logger logger = loadLogger();
+        if (logger.isDebugEnabled()) {
+            Object[] arguments = new Object[suppliers.length];
+            for (int i = 0; i < suppliers.length; i++) {
+                arguments[i] = suppliers[i].get();
+            }
+            logger.debug(format, objects2JsonStrings(arguments));
+        }
+    }
+
+    /**
+     * Log a message at level INFO according to the specified format and arguments.
+     * This form avoids superfluous object creation when the logger is disabled for the INFO level.
+     *
+     * @param format   the format string
+     * @param suppliers an array of suppliers
+     */
+    public static void info(String format, Supplier<?>... suppliers) {
+        Logger logger = loadLogger();
+        if (logger.isInfoEnabled()) {
+            Object[] arguments = new Object[suppliers.length];
+            for (int i = 0; i < suppliers.length; i++) {
+                arguments[i] = suppliers[i].get();
+            }
+            logger.info(format, objects2JsonStrings(arguments));
+        }
+    }
+
+    /**
+     * Log a message at level WARN according to the specified format and arguments.
+     * This form avoids superfluous object creation when the logger is disabled for the WARN level.
+     *
+     * @param format   the format string
+     * @param suppliers an array of suppliers
+     */
+    public static void warn(String format, Supplier<?>... suppliers) {
+        Logger logger = loadLogger();
+        if (logger.isWarnEnabled()) {
+            Object[] arguments = new Object[suppliers.length];
+            for (int i = 0; i < suppliers.length; i++) {
+                arguments[i] = suppliers[i].get();
+            }
+            logger.warn(format, objects2JsonStrings(arguments));
+        }
+    }
+
+    /**
+     * Log a message at level ERROR according to the specified format and arguments.
+     * This form avoids superfluous object creation when the logger is disabled for the ERROR level.
+     *
+     * @param format   the format string
+     * @param suppliers an array of suppliers
+     */
+    public static void error(String format, Supplier<?>... suppliers) {
+        Logger logger = loadLogger();
+        if (logger.isErrorEnabled()) {
+            Object[] arguments = new Object[suppliers.length];
+            for (int i = 0; i < suppliers.length; i++) {
+                arguments[i] = suppliers[i].get();
+            }
+            logger.error(format, objects2JsonStrings(arguments));
+        }
+    }
+
     private static String getInvokerClassName() {
         StackTraceElement stacks[] = Thread.currentThread().getStackTrace();
 
-        // 自底向上查找目标类名。
-        // 之所以不按出栈顺序查找，是因为logging类可能在函数调用栈中多次出现。
         for (int i = stacks.length - 1; i >= 0; i--) {
             if (!stacks[i].getClassName().equals(Log.class.getName())) {
                 continue;
             }
 
-            // 处理数组下标溢出的情况。
-            // 下标溢出说明当前类在函数调用栈栈底，也即程序入口点在这个类中，因此返回自身类名即可。
             return i == stacks.length - 1 ? Log.class.getName() : stacks[i + 1].getClassName();
         }
 
@@ -165,7 +252,6 @@ public final class Log {
             return logger;
         }
 
-        // 放入新的logger到原cache中
         logger = new EasyLog4jLogger(className, Log.class.getName());
         Logger oldLogger = loggerCache.putIfAbsent(className, logger);
 

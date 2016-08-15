@@ -17,6 +17,9 @@ public class LogTest {
         Log.info("info with args : {}, {}", alice, bob);
         Log.warn("warn with args : {}, {}", alice, bob);
         Log.error("error with args : {}, {}", alice, bob);
+
+        Log.debug("debug with lambda : alice.age={}, bob.age={}", alice::getAge, bob::getAge);
+        Log.debug("debug with lambda : age.sum={}", () -> alice.getAge() + bob.getAge());
     }
 
     private static class Person {
