@@ -4,7 +4,10 @@ apply plugin: 'maven'
 uploadArchives {
     repositories {
         mavenDeployer {
-            snapshotRepository(url: "http://nexus.fourbdev.com/nexus/content/repositories/dev-ops/") {
+            repository(url: mavenRepo) {
+                authentication(userName: mavenUser, password: mavenPassword)
+            }
+            snapshotRepository(url: mavenRepoSnapshots) {
                 authentication(userName: mavenUser, password: mavenPassword)
             }
         }
