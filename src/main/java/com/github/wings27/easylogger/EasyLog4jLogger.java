@@ -16,9 +16,7 @@ import java.io.Serializable;
  */
 
 /**
- * 基于slf4j API实现的slf4j-log4j Adapter类。
- * 该实现可以指定logger包装器的全称类名。（full qualified class name）。
- * 全称类名通常作为遍历函数调用栈的结束标识，从而使logging类获得打印日志信息的上下文。
+ * Slf4j-log4j Adapter based on slf4j API
  */
 public class EasyLog4jLogger extends MarkerIgnoringBase
         implements LocationAwareLogger, Serializable {
@@ -33,37 +31,18 @@ public class EasyLog4jLogger extends MarkerIgnoringBase
 
     protected transient org.apache.log4j.Logger logger;
 
-    /**
-     * 由指定的loggerName构造类的实例。loggerName的详细信息请参阅log4j manual.
-     *
-     * @param loggerName 指定的loggerName
-     */
-    public EasyLog4jLogger(String loggerName) {
+    EasyLog4jLogger(String loggerName) {
         this(loggerName, EasyLog4jLogger.class.getName());
     }
 
-    /**
-     * 由指定的loggerName和调用者的全称类名构造类的实例。
-     * 调用isTraceCapable()应确保在初始化logger之后进行，否则可能产生异常。
-     *
-     * @param loggerName      指定的loggerName
-     * @param callerClassName 调用者的全称类名
-     */
-    public EasyLog4jLogger(String loggerName, String callerClassName) {
-
+    EasyLog4jLogger(String loggerName, String callerClassName) {
         this.name = loggerName;
         this.logger = getLoggerByName(loggerName);
 
         this.callerClassName = callerClassName;
-        this.traceCapable = isTraceCapable();  // 调用isTraceCapable()要在logger初始化之后
+        this.traceCapable = isTraceCapable();
     }
 
-    /**
-     * 返回log4j是否支持名为TRACE的类目(category). 这一类目是从log4j 1.2.12版本开始支持的。
-     * 注意，调用isTraceCapable()应确保在初始化logger之后进行，否则可能产生异常。
-     *
-     * @return 返回表示log4j是否支持名为TRACE的category的布尔值。
-     */
     private boolean isTraceCapable() {
         try {
             logger.isTraceEnabled();

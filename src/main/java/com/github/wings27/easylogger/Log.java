@@ -9,12 +9,8 @@ import java.util.function.Supplier;
 
 /**
  * Project easy-logger Created by wenqiushi at 2014/08/26 15:44.
- */
-
-/**
- * Logging辅助类，通过slf4j API实现。
- * Example： Log.debug("debug message");
- * 调用栈等上下文信息会自动加入到相应参数中。
+ *
+ * Please refer to https://github.com/wings27/easy-logger
  */
 public final class Log {
 
