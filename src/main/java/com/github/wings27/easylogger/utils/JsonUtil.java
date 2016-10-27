@@ -5,6 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.wings27.easylogger.Log;
 
+import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS;
+import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES;
+import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES;
+
 /**
  * Project easy-logger
  * Created by wenqiushi on 2016-06-22 18:04.
@@ -24,8 +28,11 @@ public class JsonUtil {
         private final static ObjectMapper objMapper = new ObjectMapper();
 
         static {
+            objMapper.configure(ALLOW_COMMENTS, true);
+            objMapper.configure(ALLOW_UNQUOTED_FIELD_NAMES, true);
+            objMapper.configure(ALLOW_SINGLE_QUOTES, true);
             objMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objMapper.configure(SerializationFeature.FAIL_ON_SELF_REFERENCES, false);
+            objMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         }
     }
 
